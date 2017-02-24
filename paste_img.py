@@ -17,6 +17,10 @@ parser.add_argument("bg_dir",
     help = "where u saving your bg_images: example:/Users/mac/logo_detection/dataset/FlickrLogos-32/classes/jpg/no-logo")
 parser.add_argument("img_info_for_XML",
     help = "where u want to save your position_info.txt,example:/Users/mac/logo_detection/paste_img/position_info.txt")
+parser.add_argument("lower_bound",
+    help = "which Image size Lower bound u want to set,example:1/16",type = float)
+parser.add_argument("up_bound",
+    help = "which Image size up bound u want to set,example:1/2",type = float)
 args = parser.parse_args()
 
 # img_savepath = '/Users/mac/logo_detection/paste_img/new_img'
@@ -30,6 +34,10 @@ bg_dir = args.bg_dir
 
 # img_info_for_XML = '/Users/mac/logo_detection/paste_img/position_info.txt'
 img_info_for_XML = args.img_info_for_XML
+
+lower_bound = args.lower_bound
+
+up_bound = args.up_bound
 
 bg_file_paths = []
 logo_dir_paths = []
@@ -126,10 +134,9 @@ for logo_dir_path in logo_dir_paths:
                 my_length = bg_weigh
             else:
                 my_length = bg_length
-                
             #get logo img resize size by random in (1/16,1/2)
             while(1):
-                target_length = random.randint(my_length/16, my_length/2)
+                target_length = random.randint(my_length*lower_bound, my_length*up_bound)
                 target_weigh = logo_weigh * target_length / logo_length
                 if target_length < bg_length and target_weigh < bg_weigh:
                     break;
@@ -153,7 +160,7 @@ for logo_dir_path in logo_dir_paths:
             position_info.append(''.join(positioninfo))
             
             #every type of logo make 500 pages
-            if count > 500:
+            if count > 10:
                 print 'logo  ' + logo_dir_path.split('/')[-1] + '  finish!'
                 break
         except:
