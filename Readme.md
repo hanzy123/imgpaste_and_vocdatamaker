@@ -30,17 +30,17 @@ logo图片文件夹目录(图片后缀名需为png..好吧这里贪图方便写�
 paste_img.py 参数：
 ```
 ```
-python paste_img.py arg1 arg2 arg3 arg4
+python paste_img.py arg1 arg2 arg3 arg4 arg5 arg6
 
-arg1:where u want to save your paste_images
+arg1:Where u want to save your paste_images
+arg2:Where u saving your logo_examples
+arg3:Where u saving your bg_images
+arg4:Where u want to save your position_info.txt
+arg5:Which Image size ratio Lower bound u want to set
+arg6:Which Image size ratio up bound u want to set
+arg7:How many pictures per logo u want to make
 
-arg2:where u saving your logo_examples
-
-arg3:where u saving your bg_images
-
-arg4:where u want to save your position_info.txt
-
-python paste_img.py /Users/mac/logo_detection/paste_img/new_img /Users/mac/logo_detection/paste_img/0_logo_dataset /Users/mac/logo_detection/dataset/FlickrLogos-32/classes/jpg/no-logo /Users/mac/logo_detection/paste_img/position_info.txt
+python paste_img.py /Users/mac/logo_detection/paste_img/new_img /Users/mac/logo_detection/paste_img/0_logo_dataset /Users/mac/logo_detection/dataset/FlickrLogos-32/classes/jpg/no-logo /Users/mac/logo_detection/paste_img/position_info.txt 0.2 0.5 100 
 ```
 
 ### voc_type_xml.py
