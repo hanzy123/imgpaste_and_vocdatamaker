@@ -2,7 +2,7 @@
 # this file to make paste-logo images
 # author hanzy 2016_11_10
 
-from PIL import Image 
+import cv2
 import random
 import os
 import numpy as np
@@ -18,9 +18,11 @@ parser.add_argument("bg_dir",
 parser.add_argument("img_info_for_XML",
     help = "where u want to save your position_info.txt,example:/Users/mac/logo_detection/paste_img/position_info.txt")
 parser.add_argument("lower_bound",
-    help = "which Image size Lower bound u want to set,example:1/16",type = float)
+    help = "which Image size Lower bound u want to set,example:0.2",type = float)
 parser.add_argument("up_bound",
-    help = "which Image size up bound u want to set,example:1/2",type = float)
+    help = "which Image size up bound u want to set,example:0.5",type = float)
+parser.add_argument("picture_count_per_logo",
+    help = "How many pictures per logo u want to make ,example:100",type = int)
 args = parser.parse_args()
 
 # img_savepath = '/Users/mac/logo_detection/paste_img/new_img'
@@ -38,6 +40,8 @@ img_info_for_XML = args.img_info_for_XML
 lower_bound = args.lower_bound
 
 up_bound = args.up_bound
+
+picture_count_per_logo = args.picture_count_per_logo
 
 bg_file_paths = []
 logo_dir_paths = []
@@ -123,47 +127,59 @@ for logo_dir_path in logo_dir_paths:
         bg_file_id = random.randint(0, np.size(bg_file_paths)-1)
         try:
             #read img
-            imglogo = Image.open(logo_paths[logo_id])
-            imgbg = Image.open(bg_file_paths[bg_file_id])
-
+            imglogo = cv2.imread(logo_paths[logo_id], cv2.CV_LOAD_IMAGE_UNCHANGED)
+            imgbg = cv2.imread(bg_file_paths[bg_file_id], cv2.CV_LOAD_IMAGE_UNCHANGED)
+        
             #get logo img size && background img size
-            logo_length,logo_weigh = imglogo.size
-            bg_length,bg_weigh = imgbg.size
+            logo_length = imglogo.shape[1]
+            logo_weigh = imglogo.shape[0]
+            bg_length = imgbg.shape[1]
+            bg_weigh = imgbg.shape[0]
 
             if(bg_length > bg_weigh):
                 my_length = bg_weigh
             else:
                 my_length = bg_length
-            #get logo img resize size by random in (1/16,1/2)
+                #get logo img resize size by random in (1/16,1/2)
             while(1):
-                target_length = random.randint(my_length*lower_bound, my_length*up_bound)
+                target_length = random.randint(int(my_length*lower_bound), int(my_length*up_bound))
                 target_weigh = logo_weigh * target_length / logo_length
                 if target_length < bg_length and target_weigh < bg_weigh:
                     break;
 
             #resize logo img
-            mylogo = imglogo.resize((target_length, target_weigh), Image.ANTIALIAS)
-
+            #mylogo = imglogo.resize((target_length, target_weigh), Image.ANTIALIAS)
+            mylogo = cv2.resize(imglogo,(target_length,target_weigh),interpolation=cv2.INTER_CUBIC)
             #which bg position target paste to 
             point_position_x = random.randint(0, bg_length - target_length)
             point_position_y = random.randint(0, bg_weigh - target_weigh)
-
             #paste logo
-            box = (point_position_x,point_position_y,point_position_x + target_length,point_position_y + target_weigh)
-            imgbg.paste(mylogo, box)
-            imgbg.save(img_savepath + '/' + logo_dir_path.split('/')[-1] + '_' + str(count) + '.jpg')
+            if mylogo.shape[2] == 3:
+                #box = (point_position_x,point_position_y,point_position_x + target_length,point_position_y + target_weigh)
+                #imgbg.paste(mylogo, box)
+                for i in range(mylogo.shape[0]):
+                    for j in range(mylogo.shape[1]):
+                        imgbg[i+point_position_x][j+point_position_y][:3] = mylogo[i][j][:3]
+            elif mylogo.shape[2] == 4:
+                for i in range(mylogo.shape[0]):
+                    for j in range(mylogo.shape[1]):
+                        if not mylogo[i][j][3] == 0:
+                            imgbg[i+point_position_x][j+point_position_y][:3] = mylogo[i][j][:3]
+            #cv2.imwrite("/Users/mac/Pictures/test_ball/3.jpg",imglogo)
+            cv2.imwrite(img_savepath + '/' + logo_dir_path.split('/')[-1] + '_' + str(count) + '.jpg',imgbg)
+            #imgbg.save(img_savepath + '/' + logo_dir_path.split('/')[-1] + '_' + str(count) + '.jpg')
             count += 1
 
             positioninfo = [logo_dir_path.split('/')[-1],'_',str(count),' ',logo_dir_path.split('/')[-1],' ',
-                str(point_position_x),' ',str(point_position_y),' ',str(point_position_x + target_length),' ',
-                str(point_position_y + target_weigh)]
+                str(point_position_y),' ',str(point_position_x),' ',str(point_position_y + target_length),' ',str(point_position_x + target_weigh)]
             position_info.append(''.join(positioninfo))
-            
+                
             #every type of logo make 500 pages
-            if count > 10:
+            if count > picture_count_per_logo:
                 print 'logo  ' + logo_dir_path.split('/')[-1] + '  finish!'
                 break
-        except:
+        except Exception,e:
+            #print e
             continue
 
 #save out position_info
