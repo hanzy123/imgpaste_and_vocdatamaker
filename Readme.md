@@ -85,5 +85,5 @@ arg4:where_save_trainval.txt,train.txt,val.txt,test.txt
 arg5:trainval_rate
 
 arg6:train_rate
-
+```
 python voc_type_xml.py /Users/mac/logo_detection/paste_img/Annotations /Users/mac/logo_detection/paste_img/new_img /Users/mac/logo_detection/paste_img/position_info.txt /Users/mac/logo_detection/paste_img/ImageSets/Main 0.5 0.5
