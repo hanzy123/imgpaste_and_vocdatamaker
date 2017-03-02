@@ -43,8 +43,8 @@ arg7:How many pictures per logo u want to make
 python paste_img.py /Users/mac/logo_detection/paste_img/new_img /Users/mac/logo_detection/paste_img/0_logo_dataset /Users/mac/logo_detection/dataset/FlickrLogos-32/classes/jpg/no-logo /Users/mac/logo_detection/paste_img/position_info.txt 0.2 0.5 100 
 ```
 
-### voc_type_xml.py
-生成voc数据集类似的xml文件用来训练
+### generate_vocdataset.py
+生成voc数据集
 
 合成的图片存储目录格式
 ```
@@ -55,25 +55,9 @@ python paste_img.py /Users/mac/logo_detection/paste_img/new_img /Users/mac/logo_
 | |---adidas_3.jpg
 | |...
 ```
-```
-voc_type_xml.py 参数：
-```
-```
-python voc_type_xml.py arg1 arg2 arg3
 
-arg1:where do u want to save your xmls
-
-arg2:where your images are
-
-arg3:where your position_info_txt is
-
-python voc_type_xml.py /Users/mac/logo_detection/paste_img/Annotations /Users/mac/logo_detection/paste_img/new_img /Users/mac/logo_detection/paste_img/position_info.txt
-```
-### make_voc_text.py
 生成voc数据集类似的
-```
-test.txt,train.txt,trainval.txt,val.txt
-```
+`test.txt`,`train.txt`,`trainval.txt`,`val.txt`
 存储xml文件的文件夹格式
 ```
 |---Annotations
@@ -83,19 +67,23 @@ test.txt,train.txt,trainval.txt,val.txt
 | |---adidas_3.xml
 | |...
 ```
+
 ```
-make_voc_text.py 参数：
+voc_type_xml.py 参数：
 ```
 ```
-python make_voc_text.py arg1 arg2 arg3 arg4
+python voc_type_xml.py arg1 arg2 arg3 
 
-arg1:in which file u saving your xmls
+arg1:where do u want to save your xmls
 
-arg2:in which file u want to save your txts
+arg2:where your images are
 
-arg3:the trainval_rate is
+arg3:where your position_info_txt is
 
-arg4:the train_rate is
+arg4:where_save_trainval.txt,train.txt,val.txt,test.txt
 
-python make_voc_text.py /Users/mac/logo_detection/paste_img/Annotations /Users/mac/logo_detection/paste_img/ImageSets/Main 0.5 0.5
-```
+arg5:trainval_rate
+
+arg6:train_rate
+
+python voc_type_xml.py /Users/mac/logo_detection/paste_img/Annotations /Users/mac/logo_detection/paste_img/new_img /Users/mac/logo_detection/paste_img/position_info.txt /Users/mac/logo_detection/paste_img/ImageSets/Main 0.5 0.5
