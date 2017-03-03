@@ -69,16 +69,15 @@ python paste_img.py /Users/mac/logo_detection/paste_img/new_img /Users/mac/logo_
 ```
 
 ```
-voc_type_xml.py 参数：
+generate_vocdataset.py 参数：
 ```
 ```
-python voc_type_xml.py arg1 arg2 arg3 
+python voc_type_xml.py arg1 arg2 arg3 arg4 arg5
 
-arg1:where do u want to save your xmls
-arg2:where your images are
-arg3:where your position_info_txt is
-arg4:where_save_trainval.txt,train.txt,val.txt,test.txt
-arg5:trainval_rate
-arg6:train_rate
+arg1 : where u want to save your dataset
+arg2 : where your images are
+arg3 : where your position_info_txt is
+arg4 : the trainval_rate is
+arg5 : the train_rate is
 ```
-python voc_type_xml.py /Users/mac/logo_detection/paste_img/Annotations /Users/mac/logo_detection/paste_img/new_img /Users/mac/logo_detection/paste_img/position_info.txt /Users/mac/logo_detection/paste_img/ImageSets/Main 0.5 0.5
+python generate_vocdataset.py . toydogs position_info.txt 0.5 0.5
